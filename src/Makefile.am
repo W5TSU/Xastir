@@ -46,6 +46,7 @@ XASTIR_SRC = \
     map_geo.c \
     map_gnis.c \
     map_OSM.c map_OSM.h \
+    map_google.c map_google.h \
     map_pop.c \
     map_shp.c \
     map_tif.c \

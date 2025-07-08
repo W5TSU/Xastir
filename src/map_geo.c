@@ -71,6 +71,7 @@
 #include "xa_config.h"
 
 #include "map_OSM.h"
+#include "map_google.h"
 
 #define CHECKMALLOC(m)  if (!m) { fprintf(stderr, "***** Malloc Failed *****\n"); exit(0); }
 
@@ -603,8 +604,8 @@ void draw_geo_image_map (Widget w,
 
   unsigned long c_x_min,  c_y_min;// top left coordinates of map inside screen
   //  unsigned long c_y_max;          // bottom right coordinates of map inside screen
-  double c_x;                     // Xastir coordinates 1/100 sec, 0 = 180°W
-  double c_y;                     // Xastir coordinates 1/100 sec, 0 =  90°N
+  double c_x;                     // Xastir coordinates 1/100 sec, 0 = 180ï¿½W
+  double c_y;                     // Xastir coordinates 1/100 sec, 0 =  90ï¿½N
   double c_y_a;                   // coordinates correction for Transverse Mercator
 
   long map_y_0;                   // map pixel pointer prior to TM adjustment
@@ -678,6 +679,7 @@ void draw_geo_image_map (Widget w,
   int terraserver_flag = 0;   // U.S. satellite images/topo/reflectivity/urban
   // areas via terraserver
   int OSMserver_flag = 0;     // OpenStreetMaps server, 1 = static maps, 2 = tiled
+  int GoogleServer_flag = 0;  // Google Maps server, 1 = static maps, 2 = tiled
   unsigned tmp_zl = 0;
 
   int toporama_flag = 0;      // Canadian topo's from mm.aprs.net (originally from Toporama)
@@ -869,6 +871,18 @@ void draw_geo_image_map (Widget w,
           if (1 != sscanf (line + 14, "%s", OSMstyle))
           {
             fprintf(stderr,"draw_geo_image_map:sscanf parsing error for OSM style.\n");
+          }
+        }
+      }
+
+      if (strncasecmp (line, "GOOGLE_TILED_MAP", 16) == 0)
+      {
+        GoogleServer_flag = 2;
+        if (strlen(line) > 17)
+        {
+          if (1 != sscanf (line + 17, "%s", OSMstyle))
+          {
+            fprintf(stderr,"draw_geo_image_map:sscanf parsing error for Google style.\n");
           }
         }
       }
@@ -1215,6 +1229,21 @@ void draw_geo_image_map (Widget w,
 
     // fileimg is the server URL, if specified.
     draw_OSM_tiles(w, filenm, destination_pixmap, fileimg, tileCache, OSMstyle, OSMtileExt);
+
+#endif  // HAVE_MAGICK
+
+    return;
+  }
+
+  // Check whether Google Maps tiled server has been selected.  If so, run off
+  // to another routine to service this request.
+  //
+  else if (GoogleServer_flag == 2)
+  {
+#ifdef HAVE_MAGICK
+
+    // fileimg is the server URL, if specified.
+    draw_google_tiles(w, filenm, destination_pixmap, fileimg, tileCache, OSMstyle, OSMtileExt, NULL);
 
 #endif  // HAVE_MAGICK
 

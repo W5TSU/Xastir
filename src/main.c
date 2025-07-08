@@ -134,6 +134,7 @@ char *xastir_version=VERSION;
 #include "db_gis.h"
 
 #include "map_OSM.h"
+#include "map_google.h"
 
 #ifdef HAVE_LIBSHP
   #include "shp_hash.h"
