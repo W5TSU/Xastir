@@ -30735,7 +30735,7 @@ int main(int argc, char *argv[], char *envp[])
         ff = fopen( get_user_base_dir(SELECTED_MAP_DATA, temp_base_dir, sizeof(temp_base_dir)), "a");
         if (ff != NULL)
         {
-          fprintf(ff,"worldhi.map\n");
+          fprintf(ff,"Google_roadmap.geo\n");
           (void)fclose(ff);
         }
       }
