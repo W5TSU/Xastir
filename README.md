@@ -269,4 +269,5 @@ APRS(tm) is a Trademark of Bob Bruninga
 
 Copyright (C) 1999 Frank Giannandrea
 Copyright (C) 2000-2023 The Xastir Group
+Copyright (C) 2025 Mark Grennan (W5TSU)
 
