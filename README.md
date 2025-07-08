@@ -1,5 +1,13 @@
 # README
 ------------------------------------------------------------------------
+This is a fork of the Github.com/xastir/Xastir repository.
+
+Having worked on the code long ago I've decided to revisit and do some
+updates I'd like to have.  Starting with adding support for Google Maps.
+
+W5TSU
+
+------------------------------------------------------------------------
 
  Please at least SKIM this document before asking questions. In fact,
  READ IT if you've never successfully set up Xastir before. PLEASE!
