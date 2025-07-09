@@ -5,7 +5,7 @@ This is a fork of the Github.com/xastir/Xastir repository.
 Having worked on the code long ago I've decided to revisit and do some
 updates I'd like to have.  Starting with adding support for Google Maps.
 
-See RELEASE-NOTES-?.md for details.
+See RELEASE-NOTES-2.3.1.md for details.
 
 W5TSU
 
