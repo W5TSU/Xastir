@@ -378,7 +378,6 @@ extern void Station_List(Widget w, XtPointer clientData, XtPointer calldata);
 extern void Tracks_All_Clear(Widget w, XtPointer clientData, XtPointer callData);
 extern void Locate_station(Widget w, XtPointer clientData, XtPointer callData);
 extern void Locate_place(Widget w, XtPointer clientData, XtPointer callData);
-extern void Geocoder_place(Widget w, XtPointer clientData, XtPointer callData);
 extern void Display_Wx_Alert(Widget w, XtPointer clientData, XtPointer callData);
 extern void Auto_msg_option(Widget w, XtPointer clientData, XtPointer calldata);
 extern void Auto_msg_set(Widget w, XtPointer clientData, XtPointer calldata);
@@ -399,7 +398,6 @@ extern int check_trans (XColor c, transparent_color_record *c_trans_color_head);
 extern void draw_WMS_map (Widget w, char *filenm, int destination_pixmap, char *URL, transparent_color_record *c_trans_color_head, int nocache);
 
 extern void locate_gui_init(void);
-extern void geocoder_gui_init(void);
 extern void location_gui_init(void);
 extern void view_message_gui_init(void);
 extern void wx_gui_init(void);

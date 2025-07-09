@@ -46,7 +46,6 @@
 #include "draw_symbols.h"
 #include "maps.h"
 #include "track_gui.h"
-#include "geo.h"
 #include "snprintf.h"
 #include "objects.h"
 #include "db_gis.h"
@@ -639,8 +638,6 @@ void save_data(void)
     store_string (fout, "SOUND_DIR", SOUND_DIR);
     store_string (fout, "GROUP_DATA_FILE", group_data_file);
     store_string (fout, "GNIS_FILE", locate_gnis_filename);
-    store_string (fout, "GEOCODE_FILE", geocoder_map_filename);
-    store_int (fout, "SHOW_FIND_TARGET", show_destination_mark);
 
     /* maps */
     store_int (fout, "MAPS_LONG_LAT_GRID", long_lat_grid);
@@ -1695,16 +1692,7 @@ void load_data_or_default(void)
                     get_data_base_dir ("GNIS/WA.gnis"));
   }
 
-  if (!get_string ("GEOCODE_FILE", geocoder_map_filename, sizeof(geocoder_map_filename))
-      || geocoder_map_filename[0] == '\0')
-  {
-    xastir_snprintf(geocoder_map_filename,
-                    sizeof(geocoder_map_filename),
-                    "%s",
-                    get_data_base_dir ("GNIS/geocode"));
-  }
 
-  show_destination_mark = get_int ("SHOW_FIND_TARGET", 0, 1, 1);
 
   /* maps */
   long_lat_grid = get_int ("MAPS_LONG_LAT_GRID", 0, 1, 1);

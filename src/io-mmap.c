@@ -1,7 +1,7 @@
 
 
 
-/* Copyright 2002 Daniel Egnor.  See LICENSE.geocoder file.
+/* Copyright 2002 Daniel Egnor.
  * Portions Copyright (C) 2000-2023 The Xastir Group
  */
 

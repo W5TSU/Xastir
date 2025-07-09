@@ -5691,7 +5691,7 @@ void create_appshell( Display *display, char * UNUSED(app_name), int UNUSED(app_
          bullet_button, packet_data_button, mobile_button,
          stations_button, localstations_button, laststations_button,
          objectstations_button, objectmystations_button,
-         weather_button, wx_station_button, locate_button, geocode_place_button,
+         weather_button, wx_station_button, locate_button,
          locate_place_button, jump_button, jump_button2, alert_button,
          defaults_button, timing_button,
          coordinates_button, station_button, map_lock_pan_zoom_button, map_disable_button,
@@ -6673,14 +6673,6 @@ void create_appshell( Display *display, char * UNUSED(app_name), int UNUSED(app_
                         MY_BACKGROUND_COLOR,
                         NULL);
 
-  geocode_place_button = XtVaCreateManagedWidget(langcode("PULDNMP029"),
-                         xmPushButtonGadgetClass,
-                         mappane,
-                         XmNmnemonic,langcode_hotkey("PULDNMP029"),
-                         XmNfontList, fontlist1,
-                         MY_FOREGROUND_COLOR,
-                         MY_BACKGROUND_COLOR,
-                         NULL);
 
   coordinate_calculator_button = XtVaCreateManagedWidget(langcode("COORD001"),
                                  xmPushButtonGadgetClass,mappane,
@@ -9338,7 +9330,6 @@ void create_appshell( Display *display, char * UNUSED(app_name), int UNUSED(app_
   XtAddCallback(wx_station_button,    XmNactivateCallback,WX_station,NULL);
   XtAddCallback(jump_button,          XmNactivateCallback, Jump_location, NULL);
   XtAddCallback(locate_place_button,  XmNactivateCallback,Locate_place,NULL);
-  XtAddCallback(geocode_place_button,  XmNactivateCallback,Geocoder_place,NULL);
   XtAddCallback(coordinate_calculator_button, XmNactivateCallback,Coordinate_calc,"");
 
   XtAddCallback(send_message_to_button,       XmNactivateCallback,Send_message,NULL);
@@ -30498,7 +30489,6 @@ int main(int argc, char *argv[], char *envp[])
   (void)interface_gui_init();
   (void)list_gui_init();
   (void)locate_gui_init();
-  (void)geocoder_gui_init();
   (void)location_gui_init();
   (void)maps_init();
   (void)messages_gui_init();

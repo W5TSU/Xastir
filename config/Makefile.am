@@ -21,13 +21,9 @@ EXTRA_DIST = \
     gps_wpt.dbfawk \
     24kgrid.dbfawk \
     stored_track.dbfawk \
-    tgr2shp.dbfawk \
-    tgr2shppoly.dbfawk \
-    tgr2shppoly_2006.dbfawk \
     tgrcty.dbfawk \
     tgrkgl.dbfawk \
     tgrlk.dbfawk \
-    tgrlpt.dbfawk \
     tgrlpy.dbfawk \
     tgrplc00.dbfawk \
     tgrwat.dbfawk \

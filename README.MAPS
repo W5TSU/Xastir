@@ -7,9 +7,9 @@ Recommended Configurations for:
 
     Minimum:  Shapelib, pcre
     --------
-      Allows use of all built-in map types plus 2003 (and later) Tigermap data,
-      shapefile weather alerts, and local ESRI Shapefile format
-      maps, including U.S. satellite/image/topo maps via Internet.
+      Allows use of all built-in map types plus shapefile weather alerts, 
+      and local ESRI Shapefile format maps, including U.S. satellite/image/topo 
+      maps via Internet.
 
     Medium:  Shapelib, pcre, lcms, ImageMagick, libcurl/wget,
     -------
@@ -53,8 +53,6 @@ USGS GNIS           Built-in.  Can split into county-sized chunks
                     things up.
 Address Lookup      Built-in.
 Weather Alerts      Shapelib
-pre-2003 Tigermaps  Shapelib
-post-2003 Tigermaps Shapelib, pcre
 ESRI Shapefiles     Shapelib
 Image Maps          ImageMagick.  Often need lcms library and others
                     as well (whatever it takes to make ImageMagick
@@ -260,10 +258,9 @@ Getting Maps and other Data Files for Xastir:
        WORLDHI.MAP is suggested as a basic view of the world map.
 
       You can use any of the other maps available from this site. Many of
-      them were created from Tiger/Line maps, but they are several years out of
-      date. It is suggested that you don't use these as your primary
-      street-level maps; the newer shapefile-based maps are usually preferable.
-      In cases where you cannot compile shapefile support, these maps suffice.
+      them are several years out of date. It is suggested that you use
+      modern shapefile-based maps instead, as they are usually more current
+      and accurate.
 
       
      PocketAPRS vector maps:
@@ -426,7 +423,7 @@ and tested.  Git will be updated once the scripts are proven to work again. ****
       If you already have GDAL installed, you should have the "ogr2ogr" 
       program available to you.  ogr2ogr will not only convert projections
       and geodetic datum correctly, but will also convert format (ArcView
-      binary format to shapefile, TIGER/Line files to shapefile, etc.).
+      binary format to shapefile, etc.).
       Some detailed instructions for using ogr2ogr to do this conversion
       are available at 
           <http://www.swcp.com/~russo/shape_web/>
@@ -439,11 +436,10 @@ and tested.  Git will be updated once the scripts are proven to work again. ****
       data about that shape in the .dbf file.  While shapefiles are all
       a standard format and will most always draw (possibly after having
       been re-projected with shpproj), the corresponding .dbf data varies
-      widely depending on the data source.  For example, US Census
-      Tiger/Line files contain 20 attributes for each shape including such
-      values as the name of the shape (i.e. street name), and a "Census
-      Feature Class Code" (CFCC) which indicates whether a shape is a
-      dirt road or a superhighway, for example.   
+      widely depending on the data source.  For example, various government
+      shapefiles contain multiple attributes for each shape including such
+      values as the name of the shape (i.e. street name), and feature codes
+      which indicate whether a shape is a dirt road or a superhighway, for example.   
 
       In "pre-dbfawk" Xastir, knowledge of the various sources of
       shape files was built into the program and it was necessary to
@@ -455,11 +451,9 @@ and tested.  Git will be updated once the scripts are proven to work again. ****
         1. "Signature" recognition.  .dbfawk files located in the config/
            directory are read to find the "dbfinfo" signature, which is
            simply the ordered list of attribute names found in the .dbf file.
-           If you browse config/*.dbfawk you will see dbfawk's for the most
-           well know shapefile types.  For example, tgrlk.dbfawk matches
-           all the "tgr*lk?.dbf" US Census Tiger/Line files.  When a shapefile
-           map is displayed, its .dbf signature is matched up with one of
-           the config/*.dbfawk files.
+           If you browse config/*.dbfawk you will see dbfawk's for various
+           well known shapefile types.  When a shapefile map is displayed, 
+           its .dbf signature is matched up with one of the config/*.dbfawk files.
         2. "Tied" to a file.  If you installed a .dbfawk file in the same
             directory as the .shp and .dbf files (e.g. sample.shp, sample.dbf
             get a corresponding sample.dbfawk) then that file is used instead
@@ -522,18 +516,8 @@ and tested.  Git will be updated once the scripts are proven to work again. ****
       The special dbffields variable is used to list which fields of the
       record to be processed and in what order.  The order is significant
       since it may take several DBF fields to build up a complete name.
-      For example, in Tiger/Line, the street name is actually the 
-      concatenation of FEDIRP, FENAME, TYPE, FEDIRS.  Here's an excerpt
-      from tgrlk.dbfawk to demonstrate:
-        BEGIN {dbffields="TLID:FEDIRP:FENAME:FETYPE:FEDIRS:CFCC"}
-        ...
-	/^FEDIRP=(.+)$/ {name="$1 ";next}
-	/^FENAME=United States Highway (.*)$/ {name="$(name)US $1"; next}
-	/^FENAME=State Highway (.*)$/ {name="$(name)State $1";next}
-	/^FENAME=State Route (.*)$/ {name="$(name)SR $1";next}
-	/^FENAME=(.*)$/ {name="$(name)$1; next}
-	/^FETYPE=(.+)$/ {name="$(name) $1"; next}
-	/^FEDIRS=(.+)$/ {name="$(name) $1"; next}
+      For example, some shapefiles store street names across multiple fields
+      that need to be concatenated together.
       
       Creating and testing dbfawk files:  You can test an existing dbfawk
       file by setting debug level 16 in Xastir (this will generate a huge
@@ -579,13 +563,8 @@ and tested.  Git will be updated once the scripts are proven to work again. ****
       realize that the order that rules are listed matters, that it's important
       to use "next" as soon as it makes sense so other rules aren't looked at
       unnecessarily and, to use "skip" when you want to fix bad dbf data.
-      For example, my county's Tiger/Line maps have several coding errors
-      where a segment of a main highway is incorrectly labeled as a local 
-      street.  This rule overrides one of those incorrect records:
-	# This Furnace Dock Rd segment is really Rt 9!
-	/^TLID=139773160$/ {name="Briarcliff-Peekskill Pky"; display_level=8192; label_level=512; color=4; lanes=4; skip;}
-      TLID is the Tiger/Line ID which is the unique identifier for this 
-      segment.
+      You can override incorrect records by using the unique identifier for
+      specific features in your shapefile data.
       -----
 
     Rolling your own shapefile maps:
@@ -629,11 +608,9 @@ and tested.  Git will be updated once the scripts are proven to work again. ****
 
     4. You can also use the shapelib tools (shpproj was presented earlier)
        to manually create a shapefile.  For example, the following 
-       marks out the mile-posts for a marathon, using tgrlpt.dbfawk
-       (US Census Tiger/Line landmark points with an APRS(tm) symbol extension) 
-       for the metadata:
+       marks out the mile-posts for a marathon:
        #!/bin/sh
-       # turn mileposts into a Tiger landmark shapefile
+       # turn mileposts into a landmark shapefile
 
        rm -f posts.shp posts.dbf
        shpcreate posts point
@@ -994,17 +971,10 @@ and tested.  Git will be updated once the scripts are proven to work again. ****
      
      "Find Address" feature (US only):
 
-      The "Find Address" feature is based on the open source geo-coder by
-      Dan Egnor and as such uses the same format for the data. You can
-      download preprocessed data based on Census Tiger 2003 data at:
-      http://www.dementia.org/geocoder/tgr2003/
-
-      Reprocessed geocoding files from the 2006 Second Edition TIGER/Line 
-      data were produced by Jason Winningham in June of 2007 and made 
-      available on the TAMU FTP server by Gerry Creager.  They are much
-      better than the 2003 data, and it is recommended that they be used
-      instead.  Download them from 
-         ftp://aprs.tamu.edu/pub/geocode/
+      Note: The legacy "Find Address" feature has been removed as the 
+      underlying geocoding data sources are no longer available and the
+      TIGER/Line format is obsolete. Modern geocoding services via web APIs
+      are recommended instead.
 
      Geographic Names Information System Labels:
 

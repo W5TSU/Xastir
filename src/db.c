@@ -61,7 +61,6 @@
 #include "util.h"
 #include "bulletin_gui.h"
 #include "fcc_data.h"
-#include "geo.h"
 #include "gps.h"
 #include "rac_data.h"
 #include "interface.h"
@@ -4487,39 +4486,6 @@ void display_file(Widget w)
 
   Draw_All_CAD_Objects(w);        // Draw all CAD objects, duh.
 
-  // Check if we should mark where we found an address
-  if (mark_destination && show_destination_mark)
-  {
-    int offset;
-
-    // Set the line width in the GC.  Make it nice and fat.
-    (void)XSetLineAttributes (XtDisplay (w), gc_tint, 7, LineSolid, CapButt,JoinMiter);
-    (void)XSetForeground (XtDisplay (w), gc_tint, colors[0x27]);
-    (void)(void)XSetFunction (XtDisplay (da), gc_tint, GXxor);
-
-    // Scale it so that the 'X' stays the same size at all zoom
-    // levels.
-    offset = 25 * scale_y;
-
-    // Make a big 'X'
-    draw_vector(w,
-                destination_coord_lon-offset,  // x1
-                destination_coord_lat-offset,  // y1
-                destination_coord_lon+offset,  // x2
-                destination_coord_lat+offset,  // y2
-                gc_tint,
-                pixmap_final,
-                0);
-
-    draw_vector(w,
-                destination_coord_lon+offset,  // x1
-                destination_coord_lat-offset,  // y1
-                destination_coord_lon-offset,  // x2
-                destination_coord_lat+offset,  // y2
-                gc_tint,
-                pixmap_final,
-                0);
-  }
 
   // And last, draw the ALOHA circle
   if (Display_.aloha_circle)

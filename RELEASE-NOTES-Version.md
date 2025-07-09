@@ -148,7 +148,36 @@ ISSUE:
 
   Users can adjust the threshold by setting MAX_MAP_DOWNLOAD_FAILURES in their Xastir configuration to any value between 1 and 100.
 
+### Fixed GraphicsMagick Exception Handling Crash
 
+ISSUE:
+  Xastir was crashing with assertion error "xastir: magick/error.c:1048: ThrowLoggedException: Assertion 'exception->signature == MagickSignature' failed." when selecting Google maps.
+
+RESOLUTION:
+  - Fixed GraphicsMagick exception handling by properly initializing ExceptionInfo structures
+  - Added GetExceptionInfo(&exception) calls after early return checks but before GraphicsMagick operations
+  - Applied fixes to src/map_google.c, src/map_OSM.c for both tile and map functions
+  - Removed duplicate exception initializations
+
+### Removed Obsolete TIGER/Line Geocoding Code
+
+ISSUE:
+  TIGER/Line files are long obsolete, and the README.md file pointed users to an FTP site for downloading preprocessed geocoder files that no longer exists.
+
+CHANGES:
+  - **Removed source files**: geocoder_gui.c, geo-find.c, geo-client.c, geo.h, LICENSE.geocoder
+  - **Removed map files**: USTigermap.geo, USTigermapBorders.geo
+  - **Removed configuration files**: tgr2shp.dbfawk, tgr2shppoly.dbfawk, tgr2shppoly_2006.dbfawk, tgrlpt.dbfawk
+  - **Removed GUI components**: geocode_place_button and associated callbacks
+  - **Removed variables**: geocoder_map_filename, show_destination_mark, mark_destination, destination_coord_*
+  - **Updated documentation**: README.MAPS updated to remove TIGER references and obsolete FTP download instructions
+  - **Updated build system**: Makefile.am files updated to remove deleted files
+
+BENEFITS:
+  - Eliminates dead code and obsolete functionality
+  - Reduces build dependencies and maintenance burden
+  - Removes confusing references to non-existent data sources
+  - Cleaner, more maintainable codebase
 
 W5TSU
 

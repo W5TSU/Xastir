@@ -24,8 +24,6 @@ XASTIR_SRC = \
     festival.c festival.h \
     fetch_remote.c fetch_remote.h \
     forked_getaddrinfo.c forked_getaddrinfo.h \
-    geo-find.c geo.h \
-    geocoder_gui.c \
     gps.c gps.h \
     hashtable.c hashtable_private.h hashtable.h \
     hashtable_itr.c hashtable_itr.h \
