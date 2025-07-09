@@ -186,6 +186,11 @@ extern char rotated_label_fontname[FONT_MAX][MAX_LABEL_FONTNAME];
 
 
 extern int net_map_timeout;
+extern int max_map_download_failures;
+
+extern void increment_map_download_failure_count(void);
+extern void reset_map_download_failure_count(void);
+extern int get_map_download_failure_count(void);
 
 extern void sort_list(char *filename,int size, Widget list, int *item);
 extern void redraw_symbols(Widget w);

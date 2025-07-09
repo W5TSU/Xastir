@@ -225,6 +225,7 @@ int fetch_remote_file(char *fileimg, char *local_filename)
     // Return error-code if we had trouble
     if (CURLE_OK != res)
     {
+      increment_map_download_failure_count();
       return(1);
     }
 
@@ -263,6 +264,7 @@ int fetch_remote_file(char *fileimg, char *local_filename)
     fprintf(stderr,"Couldn't download the file\n");
     fprintf(stderr,
             "Perhaps a timeout? Try increasing \"Internet Map Timeout\".\n");
+    increment_map_download_failure_count();
 
     return(1);
   }

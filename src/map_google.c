@@ -388,6 +388,8 @@ void draw_google_tiles(Widget w,
                        char *tileExt,
                        char *apiKey)
 {
+  // Reset failure counter at the beginning of new map download session
+  reset_map_download_failure_count();
   char serverURL[MAX_FILENAME];
   char tileRootDir[MAX_FILENAME];
   char map_it[MAX_FILENAME];
@@ -448,6 +450,9 @@ void draw_google_tiles(Widget w,
 
     return; // Done indexing this file
   }
+
+  // Initialize the exception structure
+  GetExceptionInfo(&exception);
 
   // Set up tile cache directory
   if (tileCacheDir[0] != '\\0')
@@ -579,7 +584,6 @@ void draw_google_tiles(Widget w,
     tile_info = CloneImageInfo((ImageInfo *)NULL);
     tile_info->units = PixelsPerInchResolution;
 
-    GetExceptionInfo(&exception);
     row = 0;
     for (tiley = tiles.starty; tiley <= tiles.endy; tiley++)
     {

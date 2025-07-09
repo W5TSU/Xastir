@@ -731,6 +731,7 @@ static void *DLM_transfer_thread(void * UNUSED(arg) )
         {
           fprintf(stderr, "Download error for %s: curl result %d\nURL:%s\ncurlerr:%s",
                   tile->desc, curl_result, tile->url, errBuf);
+          increment_map_download_failure_count();
         }
         else
         {
@@ -754,6 +755,7 @@ static void *DLM_transfer_thread(void * UNUSED(arg) )
           if (system(cmd))
           {
             fprintf(stderr, "Couldn't download the file with wget\n");
+            increment_map_download_failure_count();
           }
           else
           {

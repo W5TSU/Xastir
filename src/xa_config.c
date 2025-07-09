@@ -1806,6 +1806,7 @@ void load_data_or_default(void)
   //N0VH
 #if defined(HAVE_MAGICK)
   net_map_timeout = get_int ("NET_MAP_TIMEOUT", 10, 300, 120);
+  max_map_download_failures = get_int ("MAX_MAP_DOWNLOAD_FAILURES", 1, 100, 20);
 #endif //HAVE_MAGICK
 
 #ifdef HAVE_LIBGEOTIFF

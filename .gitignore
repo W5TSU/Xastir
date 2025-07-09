@@ -44,6 +44,7 @@ stamp-h1
 xastir.spec
 xastir-min.spec
 xastir-lsb.spec
+wget-log*
 src/Makefile
 src/testdbfawk
 src/xastir

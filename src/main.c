@@ -914,6 +914,25 @@ Pixmap  pixmap_wx_stipple;  // Used for weather alerts
 
 int interrupt_drawing_now = 0;  // Flag used to interrupt map drawing
 int request_resize = 0;         // Flag used to request a resize operation
+static int map_download_failure_count = 0;  // Counter for map download failures
+
+
+// Map download failure counter functions
+void increment_map_download_failure_count(void) {
+    map_download_failure_count++;
+    if (map_download_failure_count >= max_map_download_failures) {
+        fprintf(stderr, "Maximum map download failures (%d) reached. Stopping map downloads.\n", max_map_download_failures);
+        interrupt_drawing_now = 1;
+    }
+}
+
+void reset_map_download_failure_count(void) {
+    map_download_failure_count = 0;
+}
+
+int get_map_download_failure_count(void) {
+    return map_download_failure_count;
+}
 int request_new_image = 0;      // Flag used to request a create_image operation
 //time_t last_input_event = (time_t)0;  // Time of last mouse/keyboard event
 void new_image(Widget da);
@@ -1034,6 +1053,7 @@ Widget RINO_download_timeout = (Widget)NULL;
 Widget net_map_slider = (Widget)NULL;
 Widget snapshot_interval_slider = (Widget)NULL;
 int net_map_timeout = 120;
+int max_map_download_failures = 20;
 
 
 

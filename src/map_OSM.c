@@ -1067,6 +1067,8 @@ void draw_OSM_tiles (Widget w,
                      char *mapName,         // if specified in xastir map file
                      char *tileExt)         // if specified in xastir map file
 {
+  // Reset failure counter at the beginning of new map download session
+  reset_map_download_failure_count();
 
   char serverURL[MAX_FILENAME];
   char tileRootDir[MAX_FILENAME];
@@ -1117,6 +1119,9 @@ void draw_OSM_tiles (Widget w,
 
     return; // Done indexing this file
   }
+
+  // Initialize the exception structure
+  GetExceptionInfo(&exception);
 
   if (tileCacheDir[0] != '\0')
   {
@@ -1179,8 +1184,6 @@ void draw_OSM_tiles (Widget w,
                     "%s",
                     filenm);
   }
-
-  GetExceptionInfo(&exception);
 
   if (debug_level & 512)
   {
@@ -1569,6 +1572,9 @@ void draw_OSM_map (Widget w,
     return; // Done indexing this file
   }
 
+  // Initialize the exception structure
+  GetExceptionInfo(&exception);
+
   // calculate the OSM zoom level (osm_zl) that is nearest the xastir scale
   osm_zl = osm_zoom_level(scale_x);
 
@@ -1704,8 +1710,6 @@ void draw_OSM_map (Widget w,
                   sizeof(file),
                   "%s",
                   local_filename);
-
-  GetExceptionInfo(&exception);
 
   image_info=CloneImageInfo((ImageInfo *) NULL);
 
