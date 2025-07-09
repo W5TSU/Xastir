@@ -52,6 +52,9 @@
 // Needed for size_t
 #include <sys/types.h>
 
+#include "main.h"
+#include "xastir.h"
+
 
 // Must be last include file
 #include "leak_detection.h"

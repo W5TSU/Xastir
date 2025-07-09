@@ -29,17 +29,17 @@ USERS:
             git config --global -l
             git config -l   # Doesn't differentiate between global and local though!
 
-    2) Go to <http://github.com/Xastir/Xastir> to access the project page.
+    2) Go to <http://github.com/w5tsu/Xastir> to access the project page.
         There you will find the URL of the git repository, just to the
         right of a button that says "HTTPS". Copy this URL to your clipboard.
 
         (At the time of this writing, the URL was
-         <https://github.com/Xastir/Xastir.git>)
+         <https://github.com/w5tsu/Xastir.git>)
      
     3) Open a shell, navigate to a directory where you want to store
         the Xastir source code, and enter this command:
 
-        git  clone https://github.com/Xastir/Xastir.git
+        git  clone https://github.com/w5tsu/Xastir.git
         
         This will create a clone of the Xastir git repository in an
         "Xastir" subdirectory of the current directory.
@@ -116,7 +116,7 @@ DEVELOPERS:
     -----------------
 
     HTTPS Method:
-      git clone https://github.com/Xastir/Xastir
+      git clone https://github.com/w5tsu/Xastir
 
     -or-
 
@@ -292,8 +292,8 @@ DEVELOPERS:
         git config --global color.ui auto
 
     Clone a repo:
-        git clone http://github.com/Xastir/Xastir
-        git clone https://github.com/Xastir/Xastir
+        git clone http://github.com/w5tsu/Xastir
+        git clone https://github.com/w5tsu/Xastir
         git clone git@github.com:Xastir/Xastir
 
     Status of local repo:

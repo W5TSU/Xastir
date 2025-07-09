@@ -49,7 +49,7 @@ users must now use "bootstrap.sh" as a first step in building Xastir.
   file updates.  Only when the master branch is really ready to
   release do you perform the following steps.  Let's assume we're
   creating release X.Y.Z, and that our Xastir clone and working
-  directory is in ~/XASTIR/Xastir.
+  directory is in ~/Xastir.
 
 - By our long-standing convention, stable releases are always even
   numbers in the last field of the release number, and odd numbers
@@ -150,7 +150,7 @@ users must now use "bootstrap.sh" as a first step in building Xastir.
 - Now go back to your working directory and finish up by pushing the
   code and tag to Github:
 
-      cd ~/XASTIR/Xastir
+      cd ~/Xastir
       git push origin master
       git push origin Release-X.Y.Z
 

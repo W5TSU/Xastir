@@ -25,6 +25,7 @@
 #define XASTIR_MAIN_H
 
 #include <X11/Intrinsic.h>
+#include "xastir.h"
 
 // For mutex debugging with Linux threads only
 #ifdef __linux__

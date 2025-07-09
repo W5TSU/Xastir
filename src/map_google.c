@@ -273,6 +273,11 @@ static void draw_image(
   if (image->storage_class == PseudoClass)
   {
     index_pack = GetIndexes(image);
+    if (!index_pack)
+    {
+      fprintf(stderr,"draw_image: Unable to getIndexes\n");
+      return;
+    }
     pixel_pack = SetImagePixels(image, 0, 0, image->columns, image->rows);
     if (!pixel_pack)
     {
@@ -455,7 +460,7 @@ void draw_google_tiles(Widget w,
   GetExceptionInfo(&exception);
 
   // Set up tile cache directory
-  if (tileCacheDir[0] != '\\0')
+  if (tileCacheDir[0] != '\0')
   {
     if (tileCacheDir[0] == '/')
     {
@@ -474,7 +479,7 @@ void draw_google_tiles(Widget w,
                     "%s", get_user_base_dir("GoogleTiles", temp_file_path, sizeof(temp_file_path)));
   }
 
-  if (mapName[0] != '\\0')
+  if (mapName[0] != '\0')
   {
     xastir_snprintf(tmpString, sizeof(tmpString), "/%s", mapName);
     strncat(tileRootDir, tmpString, sizeof(tileRootDir) - 1 - strlen(tileRootDir));
@@ -484,7 +489,7 @@ void draw_google_tiles(Widget w,
   style = get_google_style(mapName);
 
   // Set up server URL - we'll build per-tile URLs later
-  if (server_url[0] != '\\0')
+  if (server_url[0] != '\0')
   {
     xastir_snprintf(serverURL, sizeof(serverURL), "%s", server_url);
   }
@@ -510,7 +515,7 @@ void draw_google_tiles(Widget w,
   // Check how many tiles need to be downloaded
   numTiles = tilesMissing(tiles.startx, tiles.endx, tiles.starty,
                           tiles.endy, google_zl, tileRootDir,
-                          tileExt[0] != '\\0' ? tileExt : "png");
+                          tileExt[0] != '\0' ? tileExt : "png");
 
   // Download the tiles
   tileCnt = 1;
@@ -532,7 +537,7 @@ void draw_google_tiles(Widget w,
 
       // Queue the tile for download using custom URL
       DLM_queue_tile(tile_url, tilex, tiley,
-                     google_zl, tileRootDir, tileExt[0] != '\\0' ? tileExt : "png");
+                     google_zl, tileRootDir, tileExt[0] != '\0' ? tileExt : "png");
       tileCnt++;
     }
   }
@@ -592,7 +597,7 @@ void draw_google_tiles(Widget w,
       {
         xastir_snprintf(tmpString, sizeof(tmpString), "%s/%d/%lu/%lu.%s",
                         tileRootDir, google_zl, tilex, tiley,
-                        tileExt[0] != '\\0' ? tileExt : "png");
+                        tileExt[0] != '\0' ? tileExt : "png");
 
         if (filethere(tmpString))
         {

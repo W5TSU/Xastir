@@ -41,7 +41,7 @@ map_DATA=worldhi.map CC_OpenStreetMap_logo.png CC_OpenStreetMap_txt.png
 
 onlinedir=${pkgdatadir}/maps/Online
 online_DATA=OSM_tiled_cycle.geo OSM_tiled_mapnik.geo \
-        OSM_tiled_fosm.geo USTigermap.geo USTigermapBorders.geo \
+        OSM_tiled_fosm.geo \
         Google_roadmap.geo Google_satellite.geo Google_hybrid.geo Google_terrain.geo
 
 nationalmapdir=${pkgdatadir}/maps/Online/nationalmap.gov
