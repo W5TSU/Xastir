@@ -97,7 +97,7 @@ the dependencies when the main package is installed.
 There are two ways to get Xastir source code:
 
 1. Get one of the source release "tarballs" from Github at
-  https://github.com/Xastir/Xastir/releases
+  https://github.com/w5tsu/Xastir/releases
   and explode it.  (Replace X.Y.Z with the release number below)
 ```
   mkdir -p ~/src/XASTIR
@@ -114,7 +114,7 @@ There are two ways to get Xastir source code:
 ```
   mkdir -p ~/src/XASTIR
   cd ~/src/XASTIR
-  git  clone https://github.com/Xastir/Xastir.git
+  git  clone https://github.com/w5tsu/Xastir.git
 ```
   This will create a clone of the Xastir git repository in an
   "Xastir" subdirectory of the current directory.  The Xastir source

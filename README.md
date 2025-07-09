@@ -80,7 +80,7 @@ W5TSU
 2. HOW TO GET XASTIR
 
    Xastir is currently developed at
-   <http://github.com/Xastir/Xastir>
+   <http://github.com/w5tsu/Xastir>
    You can get the latest version of Xastir from there.
 
    You might try <http://xastir.org> for help and information,
@@ -97,7 +97,7 @@ W5TSU
    * Release version tarballs
 
      You can get the latest packaged release source code without git
-     at https://github.com/Xastir/Xastir/releases.  Be warned that packaged
+     at https://github.com/w5tsu/Xastir/releases.  Be warned that packaged
      source tarballs may be quite old and not representative of the current
      state of the project.  We highly recommend not using this method unless
      you have a specific reason to stick to official releases.

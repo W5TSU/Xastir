@@ -34,7 +34,7 @@ expect and what the code actually does.
 
 If you are reasonably sure that you have found a real bug and wish to
 report it, open an issue on the Xastir Github repository at
-https://github.com/Xastir/Xastir.
+https://github.com/w5tsu/Xastir.
 
 Realize that Xastir is entirely a volunteer effort largely moved
 forward by very busy people, and your bug might not get fixed in short
@@ -74,7 +74,7 @@ anyway for consistency.  Some of the developers don't like some of the
 formatting rules either, but consistency is more important than ideas
 we might have of coding style!
 
-* Check the Xastir issue tracker: http://github.com/Xastir/Xastir/issues
+* Check the Xastir issue tracker: http://github.com/w5tsu/Xastir/issues
 You need a GitHub account to create new issues, but this is free.
 This is one of the best places to see what needs to be worked on,
 and to see if anyone else has had a similar idea. 
@@ -114,7 +114,7 @@ https://help.github.com/articles/about-pull-requests/)
 In a (rather large) nutshell this process goes like this:
 
 * Log in to Xastir's github repo at
-  https://github.com/Xastir/Xastir.git and click the "Fork" button.
+  https://github.com/w5tsu/Xastir.git and click the "Fork" button.
   This will create a copy of the repo that you have full control of.
   Once you have created a fork, here's a general approach you can use:
 
@@ -131,7 +131,7 @@ In a (rather large) nutshell this process goes like this:
 
 * Add the official repo as a second remote called "upstream":
 
-      git remote add upstream https://github.com/Xastir/Xastir.git
+      git remote add upstream https://github.com/w5tsu/Xastir.git
 
   Now your local repo knows about two remote repos -- yours, and the official
   project repo.  Now make git sync to this remote, too:
