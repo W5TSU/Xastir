@@ -266,7 +266,7 @@ static void draw_image(
   XColor my_colors[256];
   PixelPacket *pixel_pack;
   PixelPacket temp_pack;
-  IndexPacket *index_pack;
+  IndexPacket *index_pack = NULL;
   int image_row, image_col;
   long scr_x, scr_y;
 

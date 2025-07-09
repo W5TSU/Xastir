@@ -5244,7 +5244,7 @@ char *sec_to_loc(long longitude, long latitude)
  */
 void substr(char *dest, char *src, int size)
 {
-  memcpy(dest, src, size+1);
+  memcpy(dest, src, size);
   dest[size] = '\0';  // Terminate string
 }
 

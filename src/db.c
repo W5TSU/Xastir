@@ -995,7 +995,7 @@ void msg_record_ack(char *to_call_sign,
   substr(m_fill.from_call_sign, my_call, MAX_CALLSIGN);
   (void)remove_trailing_asterisk(m_fill.from_call_sign);
 
-  substr(m_fill.seq, seq, MAX_MESSAGE_ORDER);
+  substr(m_fill.seq, seq, (strlen(seq) < MAX_MESSAGE_ORDER) ? strlen(seq) : MAX_MESSAGE_ORDER);
   (void)remove_trailing_spaces(m_fill.seq);
   (void)remove_leading_spaces(m_fill.seq);
 
@@ -1135,7 +1135,7 @@ void msg_record_rej(char *to_call_sign,
   substr(m_fill.from_call_sign, my_call, MAX_CALLSIGN);
   (void)remove_trailing_asterisk(m_fill.from_call_sign);
 
-  substr(m_fill.seq, seq, MAX_MESSAGE_ORDER);
+  substr(m_fill.seq, seq, (strlen(seq) < MAX_MESSAGE_ORDER) ? strlen(seq) : MAX_MESSAGE_ORDER);
   (void)remove_trailing_spaces(m_fill.seq);
   (void)remove_leading_spaces(m_fill.seq);
 
@@ -1258,7 +1258,7 @@ void msg_record_interval_tries(char *to_call_sign,
   substr(m_fill.from_call_sign, my_call, MAX_CALLSIGN);
   (void)remove_trailing_asterisk(m_fill.from_call_sign);
 
-  substr(m_fill.seq, seq, MAX_MESSAGE_ORDER);
+  substr(m_fill.seq, seq, (strlen(seq) < MAX_MESSAGE_ORDER) ? strlen(seq) : MAX_MESSAGE_ORDER);
   (void)remove_trailing_spaces(m_fill.seq);
   (void)remove_leading_spaces(m_fill.seq);
 
@@ -1354,7 +1354,7 @@ time_t msg_data_add(char *call_sign, char *from_call, char *data,
   substr(m_fill.from_call_sign, from_call, MAX_CALLSIGN);
   (void)remove_trailing_asterisk(m_fill.call_sign);
 
-  substr(m_fill.seq, seq, MAX_MESSAGE_ORDER);
+  substr(m_fill.seq, seq, (strlen(seq) < MAX_MESSAGE_ORDER) ? strlen(seq) : MAX_MESSAGE_ORDER);
   (void)remove_trailing_spaces(m_fill.seq);
   (void)remove_leading_spaces(m_fill.seq);
 
@@ -1474,7 +1474,7 @@ time_t msg_data_add(char *call_sign, char *from_call, char *data,
   // Update the message field
   substr(m_fill.message_line,data,MAX_MESSAGE_LENGTH);
 
-  substr(m_fill.seq,seq,MAX_MESSAGE_ORDER);
+  substr(m_fill.seq,seq,(strlen(seq) < MAX_MESSAGE_ORDER) ? strlen(seq) : MAX_MESSAGE_ORDER);
   (void)remove_trailing_spaces(m_fill.seq);
   (void)remove_leading_spaces(m_fill.seq);
 
@@ -1605,7 +1605,7 @@ void alert_data_add(char *call_sign, char *from_call, char *data,
   substr(m_fill.from_call_sign, from_call, MAX_CALLSIGN);
   (void)remove_trailing_asterisk(m_fill.call_sign);
 
-  substr(m_fill.seq, seq, MAX_MESSAGE_ORDER);
+  substr(m_fill.seq, seq, (strlen(seq) < MAX_MESSAGE_ORDER) ? strlen(seq) : MAX_MESSAGE_ORDER);
   (void)remove_trailing_spaces(m_fill.seq);
   (void)remove_leading_spaces(m_fill.seq);
 
@@ -1629,7 +1629,7 @@ void alert_data_add(char *call_sign, char *from_call, char *data,
   // Update the message field
   substr(m_fill.message_line,data,MAX_MESSAGE_LENGTH);
 
-  substr(m_fill.seq,seq,MAX_MESSAGE_ORDER);
+  substr(m_fill.seq,seq,(strlen(seq) < MAX_MESSAGE_ORDER) ? strlen(seq) : MAX_MESSAGE_ORDER);
   (void)remove_trailing_spaces(m_fill.seq);
   (void)remove_leading_spaces(m_fill.seq);
 
@@ -3038,7 +3038,7 @@ void display_station(Widget w, DataRow *p_station, int single)
   WeatherRow *weather = p_station->weather_data;
   time_t secs_now = sec_now();
   int ambiguity_flag;
-  long ambiguity_coord_lon, ambiguity_coord_lat;
+  long ambiguity_coord_lon = 0, ambiguity_coord_lat = 0;
   size_t temp_len;
 
 
