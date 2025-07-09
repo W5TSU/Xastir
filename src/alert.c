@@ -292,6 +292,7 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #include <locale.h>
 
@@ -304,10 +305,16 @@
 #include "wx.h"
 #include "hashtable.h"
 #include "hashtable_itr.h"
+#include "xa_config.h"
+#include "maps.h"
+#include "main.h"
 
 // Must be last include file
 #include "leak_detection.h"
 
+
+// Function declarations
+extern char *fetch_file_line(FILE *f, char *line);
 
 
 #define CHECKMALLOC(m)  if (!m) { fprintf(stderr, "***** Malloc Failed *****\n"); exit(0); }
@@ -683,7 +690,8 @@ int alert_expire(int curr_sec)
   int expire_count = 0;
   struct hashtable_itr *iterator;
   alert_entry *temp;
-
+  static time_t last_log_cleanup = 0;
+  
 
   // Check only every 60 seconds
   if ( (last_alert_expire + 60) > curr_sec )
@@ -754,6 +762,35 @@ int alert_expire(int curr_sec)
   }
 #endif  // USING_LIBGC
 
+  // Perform periodic cleanup of log files (every hour)
+  if ((curr_sec - last_log_cleanup) > (60 * 60))
+  {
+    char logfile_path[MAX_VALUE];
+    char filename[MAX_FILENAME];
+    
+    if (debug_level & 2)
+    {
+      fprintf(stderr,"Performing periodic cleanup of weather alert log files...\n");
+    }
+    
+    get_user_base_dir(LOGFILE_WX_ALERT, logfile_path, sizeof(logfile_path));
+    
+    // Clean main log file
+    clean_expired_alerts_from_log(logfile_path);
+    
+    // Clean rotated log files
+    xastir_snprintf(filename, sizeof(filename), "%s.1", logfile_path);
+    clean_expired_alerts_from_log(filename);
+    
+    xastir_snprintf(filename, sizeof(filename), "%s.2", logfile_path);
+    clean_expired_alerts_from_log(filename);
+    
+    xastir_snprintf(filename, sizeof(filename), "%s.3", logfile_path);
+    clean_expired_alerts_from_log(filename);
+    
+    last_log_cleanup = curr_sec;
+  }
+
   // Cause a screen redraw if we expired some alerts
   if (expire_count)
   {
@@ -792,6 +829,19 @@ int alert_expire(int curr_sec)
     if (debug_level & 2)
     {
       fprintf(stderr,"alert_add_entry: Empty title!\n");
+    }
+
+    clear_dangerous();
+
+    return(NULL);
+  }
+
+  // Check if alert has already expired
+  if (is_alert_expired(entry->expiration))
+  {
+    if (debug_level & 2)
+    {
+      fprintf(stderr,"alert_add_entry: Alert has expired, skipping: %s\n", entry->title);
     }
 
     clear_dangerous();
@@ -2529,6 +2579,120 @@ void alert_build_list(Message *fill)
   if (debug_level & 2)
   {
     fprintf(stderr,"alert_build_list return 2\n");
+  }
+}
+
+
+// is_alert_expired()
+//
+// Check if an alert has expired based on its expiration time
+//
+int is_alert_expired(time_t expiration_time)
+{
+  return (expiration_time < time(NULL));
+}
+
+
+// clean_expired_alerts_from_log()
+//
+// Clean expired alerts from a log file by rewriting it without expired entries
+//
+void clean_expired_alerts_from_log(char *filename)
+{
+  FILE *input_file, *output_file;
+  char temp_filename[MAX_FILENAME];
+  char line[MAX_LINE_SIZE+1];
+  char timestamp_line[MAX_LINE_SIZE+1];
+  time_t current_time = time(NULL);
+  int removed_count = 0;
+  
+  if (debug_level & 2)
+  {
+    fprintf(stderr, "Cleaning expired alerts from: %s\n", filename);
+  }
+  
+  // Create temporary filename
+  xastir_snprintf(temp_filename, sizeof(temp_filename), "%s.tmp", filename);
+  
+  input_file = fopen(filename, "r");
+  if (!input_file)
+  {
+    return; // File doesn't exist or can't be opened
+  }
+  
+  output_file = fopen(temp_filename, "w");
+  if (!output_file)
+  {
+    fclose(input_file);
+    return; // Can't create temp file
+  }
+  
+  while (!feof(input_file))
+  {
+    if (fetch_file_line(input_file, timestamp_line) == 0)
+    {
+      break; // End of file
+    }
+    
+    // Check if it's a timestamp line
+    if (timestamp_line[0] == '#' && strlen(timestamp_line) > 2)
+    {
+      time_t line_timestamp = atoi(&timestamp_line[2]);
+      time_t expire_time = line_timestamp + (24 * 60 * 60); // Add 24 hours default expiration
+      
+      // Read the next line (should be the alert data)
+      if (fetch_file_line(input_file, line) == 0)
+      {
+        break; // Unexpected end of file
+      }
+      
+      // Check if alert has expired
+      if (expire_time > current_time)
+      {
+        // Alert is still valid, keep it
+        fprintf(output_file, "%s\n", timestamp_line);
+        fprintf(output_file, "%s\n", line);
+      }
+      else
+      {
+        // Alert has expired, skip it
+        removed_count++;
+        if (debug_level & 2)
+        {
+          fprintf(stderr, "Removed expired alert: %s\n", line);
+        }
+      }
+    }
+    else if (timestamp_line[0] != '\0')
+    {
+      // Non-timestamp line, keep it as-is
+      fprintf(output_file, "%s\n", timestamp_line);
+    }
+  }
+  
+  fclose(input_file);
+  fclose(output_file);
+  
+  // Replace original file with cleaned version
+  if (removed_count > 0)
+  {
+    if (rename(temp_filename, filename) == 0)
+    {
+      if (debug_level & 2)
+      {
+        fprintf(stderr, "Cleaned %d expired alerts from %s\n", removed_count, filename);
+      }
+    }
+    else
+    {
+      fprintf(stderr, "Warning: Failed to replace %s with cleaned version\n", filename);
+      unlink(temp_filename); // Remove temp file on failure
+    }
+  }
+  else
+  {
+    // No expired alerts found, remove temp file
+    unlink(temp_filename);
   }
 }
 

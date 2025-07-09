@@ -91,6 +91,8 @@ extern void alert_build_list(Message *fill);
 extern struct hashtable_itr *create_wx_alert_iterator(void);
 extern alert_entry *get_next_wx_alert(struct hashtable_itr *iterator);
 extern int alert_list_count(void);
+extern void clean_expired_alerts_from_log(char *filename);
+extern int is_alert_expired(time_t expiration_time);
 
 #endif /* __XASTIR_ALERT_H */
 

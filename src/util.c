@@ -53,6 +53,7 @@
 #include "hashtable.h"
 #include "hashtable_itr.h"
 #include "maps.h"
+#include "alert.h"
 
 
 #define CHECKMALLOC(m)  if (!m) { fprintf(stderr, "***** Malloc Failed *****\n"); exit(0); }
@@ -2174,7 +2175,7 @@ char *compress_posit(const char *input_lat, const char group, const char *input_
 
 /*
  * See if position is defined
- * 90°N 180°W (0,0 in internal coordinates) is our undefined position
+ * 90ï¿½N 180ï¿½W (0,0 in internal coordinates) is our undefined position
  * 0N/0E is excluded from trails, could be excluded from map (#define ACCEPT_0N_0E)
  */
 
@@ -2213,22 +2214,22 @@ void convert_screen_to_xastir_coordinates(int x,
 
   if (*lon < 0)
   {
-    *lon = 0l;  // 180°W
+    *lon = 0l;  // 180ï¿½W
   }
 
   if (*lon > 129600000l)
   {
-    *lon = 129600000l;  // 180°E
+    *lon = 129600000l;  // 180ï¿½E
   }
 
   if (*lat < 0)
   {
-    *lat = 0l;  //  90°N
+    *lat = 0l;  //  90ï¿½N
   }
 
   if (*lat > 64800000l)
   {
-    *lat = 64800000l;  //  90°S
+    *lat = 64800000l;  //  90ï¿½S
   }
 }
 
@@ -2942,7 +2943,7 @@ void convert_lon_l2s(long lon, char *str, int str_len, int type)
 // Input is in [D]DMM.MM[MM]N format (degrees/decimal
 // minutes/direction)
 //
-long convert_lat_s2l(char *lat)        /* N=0°, Ctr=90°, S=180° */
+long convert_lat_s2l(char *lat)        /* N=0ï¿½, Ctr=90ï¿½, S=180ï¿½ */
 {
   long centi_sec;
   char copy[15];
@@ -3064,7 +3065,7 @@ long convert_lat_s2l(char *lat)        /* N=0°, Ctr=90°, S=180° */
 // Input is in [DD]DMM.MM[MM]W format (degrees/decimal
 // minutes/direction).
 //
-long convert_lon_s2l(char *lon)       /* W=0°, Ctr=180°, E=360° */
+long convert_lon_s2l(char *lon)       /* W=0ï¿½, Ctr=180ï¿½, E=360ï¿½ */
 {
   long centi_sec;
   char copy[16];
@@ -3560,7 +3561,7 @@ char *convert_bearing_to_name(char *bearing, int opposite)
 //
 // Input:   lat/long in Xastir coordinate system (100ths of seconds)
 //          distance in nautical miles
-//          angle in ° true
+//          angle in ï¿½ true
 //
 // Outputs: *x_long, *y_lat in Xastir coordinate system (100ths of
 //           seconds)
@@ -3569,27 +3570,27 @@ char *convert_bearing_to_name(char *bearing, int opposite)
 // From http://home.t-online.de/home/h.umland/Chapter12.pdf
 //
 // Dead-reckoning using distance in km, course C:
-// Lat_B° = Lat_A° + ( (360/40031.6) * distance * cos C )
+// Lat_Bï¿½ = Lat_Aï¿½ + ( (360/40031.6) * distance * cos C )
 //
 // Dead-reckoning using distance in nm, course C:
-// Lat_B° = Lat_A° + ( (distance/60) * cos C )
+// Lat_Bï¿½ = Lat_Aï¿½ + ( (distance/60) * cos C )
 //
 // Average of two latitudes (required for next two equations)
-// Lat_M° = (Lat_A° + Lat_B°) / 2
+// Lat_Mï¿½ = (Lat_Aï¿½ + Lat_Bï¿½) / 2
 //
 // Dead-reckoning using distance in km, course C:
-// Lon_B° = Lon_A° + ( (360/40031.6) * distance * (sin C / cos
+// Lon_Bï¿½ = Lon_Aï¿½ + ( (360/40031.6) * distance * (sin C / cos
 // Lat_M) )
 //
 // Dead-reckoning using distance in nm, course C:
-// Lon_B° = Lon_A° + ( (distance/60) * (sin C / cos Lat_M) )
+// Lon_Bï¿½ = Lon_Aï¿½ + ( (distance/60) * (sin C / cos Lat_M) )
 //
-// If resulting longitude exceeds +/- 180°, subtract/add 360°.
+// If resulting longitude exceeds +/- 180ï¿½, subtract/add 360ï¿½.
 //
 void compute_DR_position(long x_long,   // input
                          long y_lat,     // input
                          double range,   // input in nautical miles
-                         double course,  // input in ° true
+                         double course,  // input in ï¿½ true
                          long *x_long2,  // output
                          long *y_lat2)   // output
 {
@@ -3685,22 +3686,22 @@ void compute_DR_position(long x_long,   // input
 // From http://home.t-online.de/home/h.umland/Chapter12.pdf
 //
 // Dead-reckoning using distance in km, course C:
-// Lat_B° = Lat_A° + ( (360/40031.6) * distance * cos C )
+// Lat_Bï¿½ = Lat_Aï¿½ + ( (360/40031.6) * distance * cos C )
 //
 // Dead-reckoning using distance in nm, course C:
-// Lat_B° = Lat_A° + ( (distance/60) * cos C )
+// Lat_Bï¿½ = Lat_Aï¿½ + ( (distance/60) * cos C )
 //
 // Average of two latitudes (required for next two equations)
-// Lat_M° = (Lat_A° + Lat_B°) / 2
+// Lat_Mï¿½ = (Lat_Aï¿½ + Lat_Bï¿½) / 2
 //
 // Dead-reckoning using distance in km, course C:
-// Lon_B° = Lon_A° + ( (360/40031.6) * distance * (sin C / cos
+// Lon_Bï¿½ = Lon_Aï¿½ + ( (360/40031.6) * distance * (sin C / cos
 // Lat_M) )
 //
 // Dead-reckoning using distance in nm, course C:
-// Lon_B° = Lon_A° + ( (distance/60) * (sin C / cos Lat_M) )
+// Lon_Bï¿½ = Lon_Aï¿½ + ( (distance/60) * (sin C / cos Lat_M) )
 //
-// If resulting longitude exceeds +/- 180°, subtract/add 360°.
+// If resulting longitude exceeds +/- 180ï¿½, subtract/add 360ï¿½.
 //
 //
 // Possible Problems/Changes:
@@ -3729,7 +3730,7 @@ void compute_DR_position(long x_long,   // input
 //
 void compute_current_DR_position(DataRow *p_station, long *x_long, long *y_lat)
 {
-  int my_course = 0;  // In ° true
+  int my_course = 0;  // In ï¿½ true
   double range = 0.0;
   double bearing_radians, lat_M_radians;
   float lat_A, lat_B, lon_A, lon_B, lat_M;
@@ -3746,7 +3747,7 @@ void compute_current_DR_position(DataRow *p_station, long *x_long, long *y_lat)
   if ( (strlen(p_station->course)>0) && (atof(p_station->course) > 0) )
   {
 
-    my_course = atoi(p_station->course);    // In ° true
+    my_course = atoi(p_station->course);    // In ï¿½ true
   }
   //
   // Else check whether the previous position had a course.  Note
@@ -3762,7 +3763,7 @@ void compute_current_DR_position(DataRow *p_station, long *x_long, long *y_lat)
             && ( (secs_now-p_station->newest_trackpoint->prev->sec) < dead_reckoning_timeout) )
   {
 
-    // In ° true
+    // In ï¿½ true
     my_course = p_station->newest_trackpoint->prev->course;
   }
 
@@ -4226,11 +4227,16 @@ void load_wx_alerts_from_log(void)
 
   fprintf(stderr,"*** Reading WX Alert log files\n");
 
+  // Clean expired alerts from log files before loading
+  fprintf(stderr,"*** Cleaning expired alerts from log files\n");
+  clean_expired_alerts_from_log(logfile_path);
+  
   // wx_alert.log.3
   xastir_snprintf(filename,
                   sizeof(filename),
                   "%s.3",
                   logfile_path );
+  clean_expired_alerts_from_log(filename);
   load_wx_alerts_from_log_working_sub(time_now, filename);
 
   // wx_alert.log.2
@@ -4238,6 +4244,7 @@ void load_wx_alerts_from_log(void)
                   sizeof(filename),
                   "%s.2",
                   logfile_path );
+  clean_expired_alerts_from_log(filename);
   load_wx_alerts_from_log_working_sub(time_now, filename);
 
   // wx_alert.log.1
@@ -4245,6 +4252,7 @@ void load_wx_alerts_from_log(void)
                   sizeof(filename),
                   "%s.1",
                   logfile_path );
+  clean_expired_alerts_from_log(filename);
   load_wx_alerts_from_log_working_sub(time_now, filename);
 
   // wx_alert.log
@@ -4252,6 +4260,7 @@ void load_wx_alerts_from_log(void)
                   sizeof(filename),
                   "%s",
                   logfile_path );
+  clean_expired_alerts_from_log(filename);
   load_wx_alerts_from_log_working_sub(time_now, filename);
 
   fill_in_new_alert_entries();
@@ -5206,8 +5215,8 @@ char *sec_to_loc(long longitude, long latitude)
   static char buf[7];
   char *loc = buf;
 
-  // database.h:    long coord_lon;                     // Xastir coordinates 1/100 sec, 0 = 180°W
-  // database.h:    long coord_lat;                     // Xastir coordinates 1/100 sec, 0 =  90°N
+  // database.h:    long coord_lon;                     // Xastir coordinates 1/100 sec, 0 = 180ï¿½W
+  // database.h:    long coord_lat;                     // Xastir coordinates 1/100 sec, 0 =  90ï¿½N
 
   longitude /= 100L;
   latitude  =  2L * 90L * 3600L - 1L - (latitude / 100L);
